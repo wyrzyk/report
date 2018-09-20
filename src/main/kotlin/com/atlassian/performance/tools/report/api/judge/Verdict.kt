@@ -8,6 +8,7 @@ data class Verdict(
     private val reports: List<JUnitReport>
 ) {
     private val logger = LogManager.getLogger(this::class.java)
+    internal val positive: Boolean = reports.all { it.successful }
 
     fun assertAccepted(
         testClassName: String,
