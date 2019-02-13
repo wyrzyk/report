@@ -39,56 +39,67 @@ internal class JstatGcutilParser {
         fun toSystemMetrics(
             previous: CSVRecord?
         ): List<SystemMetric> {
+            // here
             return listOf(
                 metric(
                     dimension = Dimension.JSTAT_SURVI_0,
-                    value = record.get(JstatGcutilHeader.S0).toDouble()
+                    value = convert(record, JstatGcutilHeader.S0)
                 ),
                 metric(
                     dimension = Dimension.JSTAT_SURVI_1,
-                    value = record.get(JstatGcutilHeader.S1).toDouble()
+                    value = convert(record, JstatGcutilHeader.S1)
                 ),
                 metric(
                     dimension = Dimension.JSTAT_EDEN,
-                    value = record.get(JstatGcutilHeader.E).toDouble()
+                    value = convert(record, JstatGcutilHeader.E)
                 ),
                 metric(
                     dimension = Dimension.JSTAT_OLD,
-                    value = record.get(JstatGcutilHeader.O).toDouble()
+                    value = convert(record, JstatGcutilHeader.O)
                 ),
                 metric(
                     dimension = Dimension.JSTAT_META,
-                    value = record.get(JstatGcutilHeader.M).toDouble()
+                    value = convert(record, JstatGcutilHeader.M)
                 ),
                 metric(
                     dimension = Dimension.JSTAT_COMPRESSED_CLASS,
-                    value = record.get(JstatGcutilHeader.CCS).toDouble()
+                    value = convert(record, JstatGcutilHeader.CCS)
                 ),
                 metric(
                     dimension = Dimension.JSTAT_YOUNG_GEN_GC,
-                    value = record.get(JstatGcutilHeader.YGC).toDouble() -
-                        (previous?.get(JstatGcutilHeader.YGC)?.toDouble() ?: 0.0)
+                    value = convert(record, JstatGcutilHeader.YGC) -
+                        convert(previous, JstatGcutilHeader.YGC)
                 ),
                 metric(
                     dimension = Dimension.JSTAT_YOUNG_GEN_GC_TIME,
-                    value = record.get(JstatGcutilHeader.YGCT).toDouble() -
-                        (previous?.get(JstatGcutilHeader.YGCT)?.toDouble() ?: 0.0)
+                    value = convert(record, JstatGcutilHeader.YGCT) -
+                        convert(previous, JstatGcutilHeader.YGCT)
                 ),
                 metric(
                     dimension = Dimension.JSTAT_FULL_GC,
-                    value = record.get(JstatGcutilHeader.FGC).toDouble() -
-                        (previous?.get(JstatGcutilHeader.FGC)?.toDouble() ?: 0.0)
+                    value = convert(record, JstatGcutilHeader.FGC) -
+                        convert(previous, JstatGcutilHeader.FGC)
                 ),
                 metric(
                     dimension = Dimension.JSTAT_FULL_GC_TIME,
-                    value = record.get(JstatGcutilHeader.FGCT).toDouble() -
-                        (previous?.get(JstatGcutilHeader.FGCT)?.toDouble() ?: 0.0)
+                    value = convert(record, JstatGcutilHeader.FGCT) -
+                        convert(previous, JstatGcutilHeader.FGCT)
                 ),
                 metric(
                     dimension = Dimension.JSTAT_TOTAL_GC_TIME,
-                    value = record.get(JstatGcutilHeader.GCT).toDouble()
+                    value = convert(record, JstatGcutilHeader.GCT)
                 )
             )
+        }
+
+        private fun convert(record: CSVRecord?,
+                            header: JstatGcutilHeader): Double {
+            try {
+                val result = record?.get(header)?.toDouble() ?: 0.0
+                return result
+            } catch (exception: NumberFormatException) {
+                return 0.0
+            }
         }
 
         private fun metric(
