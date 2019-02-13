@@ -12,7 +12,7 @@ class PlaintextReport(
         val p95 = actionMetricStatistics.percentile(95)
         val report = StringBuilder()
         val formatter = Formatter(report)
-        val lineFormat = "| %-25s | %-13d | %-8d | %-20d |\n"
+        val lineFormat = "| %-25s | %-13s | %-8s | %-20s |\n"
         formatter.format("\n")
         formatter.format("+---------------------------+---------------+----------+----------------------+\n")
         formatter.format("| Action name               | sample size   | errors   | 95th percentile [ms] |\n")
