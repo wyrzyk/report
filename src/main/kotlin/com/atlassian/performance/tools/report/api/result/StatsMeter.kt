@@ -31,7 +31,13 @@ class StatsMeter {
         val sampleSizes = mutableMapOf<String, Long>()
         val errors = mutableMapOf<String, Int>()
         for (label in result.actionLabels) {
-            sampleSizes[label] = statistics.sampleSize.getOrDefault(label, 0).toLong()
+            var result : Long = 0
+            try {
+                result = statistics.sampleSize.getOrDefault(label, 0).toLong()
+            } catch (exception: ClassCastException) {
+                result = 0
+            }
+            sampleSizes[label] = 0
             errors[label] = statistics.errors.getOrDefault(label, 0)
         }
         return InteractionStats(result.cohort, sampleSizes, centers, dispersions, errors)
