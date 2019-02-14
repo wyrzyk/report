@@ -50,9 +50,9 @@ class DataReporter(
                 "response time standard deviation"
             ) + labels.map { stats.dispersions?.get(it) }.map { it?.serialize() }
         })
-//        printer.printRecords(data.map { stats ->
-//            listOf(stats.cohort, "error count") + labels.map { stats.errors?.get(it) }
-//        })
+        printer.printRecords(data.map { stats ->
+            listOf(stats.cohort, "error count") + labels.map { stats.errors?.get(it) }
+        })
         printer.flush()
     }
 
